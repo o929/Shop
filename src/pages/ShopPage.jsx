@@ -5,7 +5,7 @@ import { db } from "../firebaseConfig";
 import CartPurchasePage from "../components/CartPurchasePage";
 import '../App.css'
 import { ShoppingCart } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const ShopPage = ({
   cart,
@@ -73,7 +73,7 @@ const ShopPage = ({
           );
         })}
 
-        <div className="cart" onClick={() => navigate('/cart')}>
+        <Link className="cart" to="/cart">
           <ShoppingCart
             size={28}
             color="#333"
@@ -81,7 +81,7 @@ const ShopPage = ({
             style={{ cursor: "pointer" }}
           />
           <span className='cart-badge'>{cart.reduce((acc, item) => acc + item.qty, 0)}</span>
-        </div>
+        </Link>
       </div>
 
       {/* Hidden inline drawer removed; cart now lives at /cart */}

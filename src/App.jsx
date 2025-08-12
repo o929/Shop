@@ -1,13 +1,44 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ShopPage from "./pages/ShopPage";
-import Cart from "./components/Cart";
 // import './index.css';
 import './App.css';
 import { ShoppingCart } from "lucide-react";
 
 function App() {
   const [cart, setCart] = useState([]);
+
+  const addToCart = (product) => {
+    setCart((previousCart) => {
+      const existingItem = previousCart.find((item) => item.id === product.id);
+      if (existingItem) {
+        return previousCart.map((item) =>
+          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+        );
+      }
+      return [...previousCart, { ...product, qty: 1 }];
+    });
+  };
+
+  const increaseQty = (id) => {
+    setCart((previousCart) =>
+      previousCart.map((item) =>
+        item.id === id ? { ...item, qty: item.qty + 1 } : item
+      )
+    );
+  };
+
+  const decreaseQty = (id) => {
+    setCart((previousCart) =>
+      previousCart.map((item) =>
+        item.id === id ? { ...item, qty: Math.max(1, item.qty - 1) } : item
+      )
+    );
+  };
+
+  const removeItem = (id) => {
+    setCart((previousCart) => previousCart.filter((item) => item.id !== id));
+  };
 
   const clearCart = () => setCart([]);
 
@@ -31,22 +62,29 @@ function App() {
         <Route
           path="/"
           element={
-            <ShopPage cart={cart} setCart={setCart} clearCart={clearCart} />
+            <ShopPage
+              cart={cart}
+              addToCart={addToCart}
+              increaseQty={increaseQty}
+              decreaseQty={decreaseQty}
+              removeItem={removeItem}
+              clearCart={clearCart}
+            />
           }
         />
         <Route
           path="/shop"
           element={
-            <ShopPage  cart={cart} setCart={setCart} clearCart={clearCart} />
+            <ShopPage
+              cart={cart}
+              addToCart={addToCart}
+              increaseQty={increaseQty}
+              decreaseQty={decreaseQty}
+              removeItem={removeItem}
+              clearCart={clearCart}
+            />
           }
         />
-        <Route
-          path="/cart"
-          element={
-            <Cart cart={cart} clearCart={clearCart} />
-          }
-        />
-        
       </Routes>
     </Router>
   );

@@ -141,6 +141,14 @@ body{
   background-color: #791901; /* Indigo-700 */
 }
 
+/* Inline quantity controls on product cards */
+.qty-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
 /* Cart icon container and badge */
 .cart {
   position: fixed;

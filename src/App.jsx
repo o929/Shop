@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ShopPage from "./pages/ShopPage";
+import CartPurchasePage from "./components/CartPurchasePage";
 // import './index.css';
 import './App.css';
 import { ShoppingCart } from "lucide-react";
@@ -29,11 +30,14 @@ function App() {
   };
 
   const decreaseQty = (id) => {
-    setCart((previousCart) =>
-      previousCart.map((item) =>
-        item.id === id ? { ...item, qty: Math.max(1, item.qty - 1) } : item
-      )
-    );
+    setCart((previousCart) => {
+      const next = previousCart
+        .map((item) =>
+          item.id === id ? { ...item, qty: item.qty - 1 } : item
+        )
+        .filter((item) => item.qty > 0);
+      return next;
+    });
   };
 
   const removeItem = (id) => {
@@ -51,8 +55,7 @@ function App() {
           <h1 className="logo">Small Shop</h1>
           <div className="links">
             <Link className="link" to="/shop">Shop</Link>
-            <br />
-            
+            <Link className="link" to="/cart" style={{ marginLeft: 16 }}>Cart</Link>
           </div>
         </div>
         </nav>
@@ -78,6 +81,18 @@ function App() {
             <ShopPage
               cart={cart}
               addToCart={addToCart}
+              increaseQty={increaseQty}
+              decreaseQty={decreaseQty}
+              removeItem={removeItem}
+              clearCart={clearCart}
+            />
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <CartPurchasePage
+              cart={cart}
               increaseQty={increaseQty}
               decreaseQty={decreaseQty}
               removeItem={removeItem}

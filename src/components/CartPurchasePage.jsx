@@ -88,9 +88,7 @@ const CartPurchasePage = ({
   }, [errormessage]);
 
   return (
-    <section className="purchase-container"   style={{
-        display: showWhiteBackground ? "block" : "none",
-      }}>
+    <section className="purchase-container" style={ showWhiteBackground === undefined ? {} : { display: showWhiteBackground ? 'block' : 'none' } }>
       <h2 className="purchase-title">🛒 Your Cart & Checkout</h2>
 
       {message && (

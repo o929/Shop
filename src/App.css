@@ -9,6 +9,7 @@ header {
   justify-content: center;
   pointer-events: none; /* allow clicks only on child elements */
 }
+.nav, .cart, .link { pointer-events: auto; }
 body{
   background-color: #ffffff;
   padding: 0;
@@ -140,23 +141,37 @@ body{
   background-color: #791901; /* Indigo-700 */
 }
 
-.Cart-icon{
-    position: fixed;
-    top: 65px;
-    z-index: 9999;
-    right: 120px;
-    
+/* Inline quantity controls on product cards */
+.qty-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
 }
-.span{
-background-color: red;
-/* padding-top: 6px; */
-border-radius: 50%;
-height: 20px;
-color: white;
-width: 20px;
-text-align: center;
-right: 145px;
+
+/* Cart icon container and badge */
+.cart {
+  position: fixed;
+  top: 65px;
+  right: 120px;
+  z-index: 9999;
 }
+.cart-badge{
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: red;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+}
+
 .cart-item-qty {
   display: flex;
   align-items: center;

@@ -12,7 +12,7 @@ const CartPurchasePage = ({
   decreaseQty,
   removeItem,
   clearCart,
-  showWhiteBackground 
+  showWhiteBackground,
 }) => {
   const [form, setForm] = useState({
     name: "",
@@ -56,7 +56,7 @@ const CartPurchasePage = ({
 
     try {
       setLoading(true);
-      const docRef = await addDoc(collection(db, "orders"), {
+      await addDoc(collection(db, "orders"), {
         client: form,
         items: cart,
         total,
@@ -80,7 +80,7 @@ const CartPurchasePage = ({
       return () => clearTimeout(timer);
     }
   }, [message]);
-    useEffect(() => {
+  useEffect(() => {
     if (errormessage ) {
       const timer = setTimeout(() => setErrormessage(""), 1000);
       return () => clearTimeout(timer);
@@ -88,9 +88,7 @@ const CartPurchasePage = ({
   }, [errormessage]);
 
   return (
-    <section className="purchase-container"   style={{
-        display: showWhiteBackground ? "block" : "none",
-      }}>
+    <section className="purchase-container" style={ showWhiteBackground === undefined ? {} : { display: showWhiteBackground ? 'block' : 'none' } }>
       <h2 className="purchase-title">🛒 Your Cart & Checkout</h2>
 
       {message && (
@@ -203,6 +201,7 @@ CartPurchasePage.propTypes = {
   decreaseQty: PropTypes.func.isRequired,
   removeItem: PropTypes.func.isRequired,
   clearCart: PropTypes.func.isRequired,
+  showWhiteBackground: PropTypes.bool,
 };
 
 export default CartPurchasePage;

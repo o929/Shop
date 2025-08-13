@@ -3,30 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs,onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 // import Cart from "../components/Cart";
-import CartPurchasePage from "../components/CartPurchasePage";
+// import CartPurchasePage from "../components/CartPurchasePage";
 import '../App.css'
 import { ShoppingCart } from 'lucide-react';
 
 
-const ShopPage = () => {
+const ShopPage = ({ cart, setCart }) => {
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
-    const [showWhiteBackground, setShowWhiteBackground] = useState(false);
 
-  const fetchProducts = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "products"));
-      const productData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setProducts(productData);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-fetchProducts()
-  // 🔑 This is the key: it updates the cart when user clicks add
+  // 🔑 Add to cart updates App-level cart
   const addToCart = (productId) => {
     const product = products.find(p => p.id === productId);
     if (!product) return;
@@ -37,113 +22,57 @@ fetchProducts()
         return prevCart.map(item =>
           item.id === productId ? { ...item, qty: item.qty + 1 } : item
         );
-      } else {
-        return [...prevCart, { ...product, qty: 1 }];
       }
+      return [...prevCart, { ...product, qty: 1 }];
     });
   };
 
-  const increaseQty = (id) => {
-    setCart(cart.map(item => item.id === id ? { ...item, qty: item.qty + 1 } : item));
-  };
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "products"),
+      (snapshot) => {
+        const productData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProducts(productData);
+      },
+      (error) => {
+        console.error("onSnapshot error:", error);
+      }
+    );
 
-  const decreaseQty = (id) => {
-    setCart(cart.map(item =>
-      item.id === id
-        ? { ...item, qty: item.qty > 1 ? item.qty - 1 : 1 }
-        : item
-    ));
-  };
+    return () => unsubscribe();
+  }, []);
 
-  const removeItem = (id) => {
-    setCart(cart.filter(item => item.id !== id));
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
-useEffect(() => {
-  const unsubscribe = onSnapshot(
-    collection(db, "products"),
-    (snapshot) => {
-      console.log("Snapshot received:", snapshot.docs.length);
-      const productData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setProducts(productData);
-    },
-    (error) => {
-      console.error("onSnapshot error:", error);
-    }
-  );
-
-  return () => unsubscribe();
-}, []);
-return (
-  <div className='cards-container' style={{ padding: "20px" }}>
-    <section className="hero">
-      <div className="hero-content">
-        <h1 className="hero-title">Discover products you’ll love</h1>
-        <p className="hero-subtitle">Quality items, curated for you. Fast shipping, fair prices.</p>
-        <a href="#cards" className="hero-cta" aria-label="Buy now and jump to products">Buy now</a>
-      </div>
-    </section>
-<div id="cards" className="product-list">
-  {products.map((product) => (
-    <div key={product.id} className="product-card">
-      <img src={product.image} alt={product.name} />
-      <h3>{product.name}</h3>
-      <p>{product.det}</p>
-      <h2>${product.price}</h2>
-      <button onClick={() => addToCart(product.id)}>
-       
-        <ShoppingCart
-              size={25}
-              className='Cart-icon-product'
-              style={{ cursor: "pointer" }}
-              />
-              </button>
-      
-    </div>
-
-  ))}
-  <div className="cart">
-
+  return (
+    <div className='cards-container' style={{ padding: "20px" }}>
+      <section className="hero">
+        <div className="hero-content">
+          <h1 className="hero-title">Discover products you’ll love</h1>
+          <p className="hero-subtitle">Quality items, curated for you. Fast shipping, fair prices.</p>
+          <a href="#cards" className="hero-cta" aria-label="Buy now and jump to products">Buy now</a>
+        </div>
+      </section>
+      <div id="cards" className="product-list">
+        {products.map((product) => (
+          <div key={product.id} className="product-card">
+            <img src={product.image} alt={product.name} />
+            <h3>{product.name}</h3>
+            <p>{product.det}</p>
+            <h2>${product.price}</h2>
+            <button onClick={() => addToCart(product.id)}>
               <ShoppingCart
-              size={28}
-              color="#333"
-              className='Cart-icon'
-              style={{ cursor: "pointer" }}
-              onClick={() => setShowWhiteBackground(prev => !prev)} // 👈 sets the white bg
+                size={25}
+                className='Cart-icon-product'
+                style={{ cursor: "pointer" }}
               />
-              <span className='Cart-icon span'>{cart.reduce((acc, item) => acc + item.qty, 0)}</span>
-  </div>
-</div>
-
- <CartPurchasePage
- showWhiteBackground={showWhiteBackground}  
-  cart={cart}
-  increaseQty={increaseQty}
-  decreaseQty={decreaseQty}
-  removeItem={removeItem}
-  clearCart={clearCart}
-/>
-
-
-    {/* <Cart
-      cart={cart}
-      increaseQty={increaseQty}
-      decreaseQty={decreaseQty}
-      removeItem={removeItem}
-      clearCart={clearCart}
-      products={products}
-      addToCart={addToCart}
-    /> */}
-  </div>
-);
-
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default ShopPage;

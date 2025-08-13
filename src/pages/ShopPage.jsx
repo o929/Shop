@@ -83,8 +83,14 @@ useEffect(() => {
 }, []);
 return (
   <div className='cards-container' style={{ padding: "20px" }}>
-    <h1 className='head-text'>Shop Page</h1>
-<div className="product-list">
+    <section className="hero">
+      <div className="hero-content">
+        <h1 className="hero-title">Discover products you’ll love</h1>
+        <p className="hero-subtitle">Quality items, curated for you. Fast shipping, fair prices.</p>
+        <a href="#cards" className="hero-cta" aria-label="Buy now and jump to products">Buy now</a>
+      </div>
+    </section>
+<div id="cards" className="product-list">
   {products.map((product) => (
     <div key={product.id} className="product-card">
       <img src={product.image} alt={product.name} />

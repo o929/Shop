@@ -180,3 +180,38 @@ right: 145px;
   padding: 5px 10px;
   font-size: 19px !important;
 }
+
+/* Hero section */
+.hero {
+  margin-top: 120px;
+  padding: 80px 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 12px;
+  text-align: center;
+}
+.hero-title {
+  margin: 0 0 8px;
+  font-size: 42px;
+  line-height: 1.1;
+  color: #0f172a;
+}
+.hero-subtitle {
+  margin: 0 0 24px;
+  font-size: 18px;
+  color: #475569;
+}
+.hero-cta {
+  display: inline-block;
+  background-color: #b32806;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.hero-cta:hover {
+  background-color: #791901;
+}
+
+/* Ensure anchor scroll positions account for fixed header */
+.product-list { scroll-margin-top: 120px; }
